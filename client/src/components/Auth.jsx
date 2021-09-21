@@ -1,8 +1,10 @@
-import { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import Cookies from 'universal-cookie';
+import axios from 'axios';
 
-import signInImage from '../assets/signup.jpg';
+import signinImage from '../assets/signup.jpg';
+
+const cookies = new Cookies();
 
 const initialState = {
   fullName: '',
@@ -13,11 +15,9 @@ const initialState = {
   avatarURL: '',
 };
 
-const cookies = new Cookies();
-
 const Auth = () => {
-  const [isSignUp, setIsSignUp] = useState(true);
   const [form, setForm] = useState(initialState);
+  const [isSignup, setIsSignup] = useState(true);
 
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -27,11 +27,13 @@ const Auth = () => {
     e.preventDefault();
 
     const { username, password, phoneNumber, avatarURL } = form;
-    const URL = 'http://localhost:5000/auth';
+
+    const URL = 'https://localhost:5000/auth';
+    // const URL = 'https://medical-pager.herokuapp.com/auth';
 
     const {
       data: { token, userId, hashedPassword, fullName },
-    } = await axios.post(`${URL}/${isSignUp ? 'signup' : 'login'}`, {
+    } = await axios.post(`${URL}/${isSignup ? 'signup' : 'login'}`, {
       username,
       password,
       fullName: form.fullName,
@@ -43,25 +45,27 @@ const Auth = () => {
     cookies.set('username', username);
     cookies.set('fullName', fullName);
     cookies.set('userId', userId);
-    if (isSignUp) {
+
+    if (isSignup) {
       cookies.set('phoneNumber', phoneNumber);
       cookies.set('avatarURL', avatarURL);
       cookies.set('hashedPassword', hashedPassword);
     }
+
     window.location.reload();
   };
 
   const switchMode = () => {
-    setIsSignUp(prevIsSignUp => !prevIsSignUp);
+    setIsSignup(prevIsSignup => !prevIsSignup);
   };
 
   return (
     <div className="auth__form-container">
       <div className="auth__form-container_fields">
         <div className="auth__form-container_fields-content">
-          <p>{isSignUp ? 'Sign Up' : 'Sign In'}</p>
+          <p>{isSignup ? 'Sign Up' : 'Sign In'}</p>
           <form onSubmit={handleSubmit}>
-            {isSignUp && (
+            {isSignup && (
               <div className="auth__form-container_fields-content_input">
                 <label htmlFor="fullName">Full Name</label>
                 <input
@@ -83,29 +87,29 @@ const Auth = () => {
                 required
               />
             </div>
-            {isSignUp && (
-              <>
-                <div className="auth__form-container_fields-content_input">
-                  <label htmlFor="phoneNumber">Phone Number</label>
-                  <input
-                    name="phoneNumber"
-                    type="text"
-                    placeholder="Phone Number"
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className="auth__form-container_fields-content_input">
-                  <label htmlFor="avatarURL">Avatar URL</label>
-                  <input
-                    name="avatarURL"
-                    type="text"
-                    placeholder="Avatar URL"
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </>
+            {isSignup && (
+              <div className="auth__form-container_fields-content_input">
+                <label htmlFor="phoneNumber">Phone Number</label>
+                <input
+                  name="phoneNumber"
+                  type="text"
+                  placeholder="Phone Number"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            )}
+            {isSignup && (
+              <div className="auth__form-container_fields-content_input">
+                <label htmlFor="avatarURL">Avatar URL</label>
+                <input
+                  name="avatarURL"
+                  type="text"
+                  placeholder="Avatar URL"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             )}
             <div className="auth__form-container_fields-content_input">
               <label htmlFor="password">Password</label>
@@ -117,7 +121,7 @@ const Auth = () => {
                 required
               />
             </div>
-            {isSignUp && (
+            {isSignup && (
               <div className="auth__form-container_fields-content_input">
                 <label htmlFor="confirmPassword">Confirm Password</label>
                 <input
@@ -130,21 +134,21 @@ const Auth = () => {
               </div>
             )}
             <div className="auth__form-container_fields-content_button">
-              <button>{isSignUp ? 'Sign Up' : 'Sign In'}</button>
+              <button>{isSignup ? 'Sign Up' : 'Sign In'}</button>
             </div>
           </form>
           <div className="auth__form-container_fields-account">
             <p>
-              {isSignUp ? 'Already have an account?' : "Don't have an account?"}
+              {isSignup ? 'Already have an account?' : "Don't have an account?"}
               <span onClick={switchMode}>
-                {isSignUp ? 'Sign In' : 'Sign Up'}
+                {isSignup ? 'Sign In' : 'Sign Up'}
               </span>
             </p>
           </div>
         </div>
       </div>
       <div className="auth__form-container_image">
-        <img src={signInImage} alt="sign in" />
+        <img src={signinImage} alt="sign in" />
       </div>
     </div>
   );

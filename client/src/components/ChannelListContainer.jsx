@@ -16,8 +16,8 @@ const SideBar = ({ logout }) => (
       </div>
     </div>
     <div className="channel-list__sidebar__icon2">
-      <div className="icon2__inner" onClick={logout}>
-        <img src={LogoutIcon} alt="logout" width="30" />
+      <div className="icon1__inner" onClick={logout}>
+        <img src={LogoutIcon} alt="Logout" width="30" />
       </div>
     </div>
   </div>

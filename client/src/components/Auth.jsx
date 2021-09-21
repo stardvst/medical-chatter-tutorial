@@ -16,7 +16,7 @@ const initialState = {
 const cookies = new Cookies();
 
 const Auth = () => {
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(true);
   const [form, setForm] = useState(initialState);
 
   const handleChange = e => {
@@ -133,19 +133,16 @@ const Auth = () => {
               <button>{isSignUp ? 'Sign Up' : 'Sign In'}</button>
             </div>
           </form>
-
           <div className="auth__form-container_fields-account">
             <p>
               {isSignUp ? 'Already have an account?' : "Don't have an account?"}
               <span onClick={switchMode}>
-                {' '}
                 {isSignUp ? 'Sign In' : 'Sign Up'}
               </span>
             </p>
           </div>
         </div>
       </div>
-
       <div className="auth__form-container_image">
         <img src={signInImage} alt="sign in" />
       </div>
